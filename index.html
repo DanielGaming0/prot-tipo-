@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+  <title>AcesseSaude - Protótipo Interativo</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* RESET & VARIÁVEIS DE DESIGN */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg-dark: #07090e;
+      --bg-gradient: radial-gradient(circle at 50% 20%, #111827 0%, #050608 100%);
+      --accent-cyan: #38bdf8;
+      --accent-green: #10b981;
+      --accent-gold: #f59e0b;
+      --accent-purple: #a855f7;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(56, 189, 248, 0.25);
+      --text-bright: #ffffff;
+      --text-sub: #94a3b8;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      background-color: var(--bg-dark);
+      color: var(--text-bright);
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* CONTAINER FULLSCREEN COM ORBES ANIMADOS NO FUNDO */
+    .slide-deck {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 20px 100px 20px;
+      overflow: hidden;
+    }
+
+    /* LUZES GLOW ANIMADAS DE FUNDO */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.25;
+      pointer-events: none;
+      animation: floatOrb 8s infinite alternate ease-in-out;
+    }
+
+    .glow-orb-1 {
+      width: 350px;
+      height: 350px;
+      background: var(--accent-cyan);
+      top: -100px;
+      left: -100px;
+    }
+
+    .glow-orb-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--accent-purple);
+      bottom: -150px;
+      right: -100px;
+      animation-delay: -4s;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 50px) scale(1.15); }
+    }
+
+    /* SLIDE PRINCIPAL */
+    .slide {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: clamp(0.75rem, 1vw, 0.85rem);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--accent-cyan);
+      margin-bottom: 8px;
+      font-weight: 600;
+      text-align: center;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: var(--text-bright);
+      text-align: center;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffffff 30%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .subtitle {
+      font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+      color: var(--text-sub);
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    /* LAYOUT DUPLO: MOCKUP + EXPLICAÇÃO PASSO A PASSO */
+    .prototype-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 35px;
+      width: 100%;
+      align-items: center;
+      justify-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .prototype-container {
+        grid-template-columns: 340px 1fr;
+        gap: 50px;
+      }
+    }
+
+    /* MOCKUP DO SMARTPHONE COM SHINE E FLUTUAÇÃO */
+    .phone-mockup {
+      width: 100%;
+      max-width: 320px;
+      height: 560px;
+      background: #0d1322;
+      border: 8px solid #1e293b;
+      border-radius: 42px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.25);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: phoneFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes phoneFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .phone-notch {
+      width: 110px;
+      height: 18px;
+      background: #1e293b;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      z-index: 50;
+    }
+
+    .phone-screen {
+      flex: 1;
+      padding: 30px 16px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ANIMAÇÃO DE TROCA DAS TELAS DO APP */
+    .screen-view {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      animation: slideInScreen 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .screen-view.active {
+      display: flex;
+    }
+
+    @keyframes slideInScreen {
+      from { opacity: 0; transform: scale(0.95) translateY(15px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* COMPONENTES INTERNOS DA TELA DO APP (ANIMADOS) */
+    .app-header {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .app-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    }
+
+    .app-sub {
+      font-size: 0.7rem;
+      color: var(--text-sub);
+    }
+
+    .pulse-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(56, 189, 248, 0.05));
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.2); }
+      100% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.6); }
+    }
+
+    .mock-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+
+    .mock-card.highlight {
+      border-color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .action-badge {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 12px 8px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 0.72rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .action-badge i {
+      font-size: 1.2rem;
+      color: var(--accent-cyan);
+    }
+
+    /* CARD EXPLICATIVO COM ANIMAÇÃO DE ENTRADA */
+    .explanation-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px 32px;
+      width: 100%;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .explanation-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple));
+    }
+
+    .explanation-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .explanation-card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      margin-bottom: 18px;
+    }
+
+    .bullets-list {
+      list-style: none;
+    }
+
+    .bullets-list li {
+      font-size: 0.9rem;
+      color: var(--text-bright);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      animation: fadeInBullet 0.4s ease forwards;
+    }
+
+    @keyframes fadeInBullet {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .bullets-list li i {
+      color: var(--accent-green);
+      margin-top: 3px;
+      font-size: 1rem;
+    }
+
+    /* BANNER DE DESTAQUE FINAL: DESENVOLVIDO E FUNCIONAL */
+    .dev-badge {
+      margin-top: 20px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%);
+      border: 1px solid var(--accent-green);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    }
+
+    .dev-badge i {
+      font-size: 1.8rem;
+      color: var(--accent-green);
+      animation: heartBeat 2s infinite ease-in-out;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .dev-badge-text h5 {
+      font-size: 0.88rem;
+      color: var(--accent-green);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .dev-badge-text p {
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      margin-bottom: 0;
+      line-height: 1.4;
+    }
+
+    /* BARRA DE NAVEGAÇÃO SUPERIOR/INFERIOR MODERNA */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      height: 75px;
+      padding: 0 clamp(20px, 5vw, 60px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(7, 9, 14, 0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 100;
+    }
+
+    .counter {
+      font-size: clamp(0.85rem, 1vw, 1rem);
+      color: var(--text-sub);
+      letter-spacing: 2px;
+      font-weight: 500;
+    }
+
+    .counter span {
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .arrows-box {
+      display: flex;
+      gap: 14px;
+    }
+
+    .arrow-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-bright);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-size: 1.1rem;
+    }
+
+    .arrow-btn:hover:not(:disabled) {
+      background: var(--accent-cyan);
+      color: var(--bg-dark);
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
+
+    .arrow-btn:disabled {
+      opacity: 0.2;
+      cursor: not-allowed;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide-deck">
+
+    <!-- LUZES DE FUNDO ANIMADAS -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <!-- SEÇÃO PRINCIPAL DE APRESENTAÇÃO -->
+    <main class="slide">
+      <span class="tag"><i class="fa-solid fa-wand-magic-sparkles"></i> COMO FUNCIONA O APLICATIVO</span>
+      <h1>AcesseSaude</h1>
+      <p class="subtitle">Transformando a gestão e o agendamento na saúde pública em passos simples</p>
+
+      <div class="prototype-container">
+        
+        <!-- MOCKUP DO CELULAR COM TELAS EXPLICATIVAS ANIMADAS -->
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          
+          <div class="phone-screen">
+
+            <!-- TELA 1: LOGIN E ACESSO -->
+            <div class="screen-view active" id="screen-1">
+              <div class="app-header">
+                <div class="app-logo">🏥 AcesseSaude</div>
+                <div class="app-sub">Saúde Pública Inteligente</div>
+              </div>
+
+              <div class="pulse-btn">
+                <i class="fa-brands fa-google"></i> Entrar com Google
+              </div>
+
+              <div class="pulse-btn" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.1);">
+                <i class="fa-solid fa-id-card"></i> CPF / Cartão SUS
+              </div>
+
+              <div class="mock-card" style="margin-top: auto; text-align: center; font-size: 0.68rem; color: var(--accent-cyan);">
+                <i class="fa-solid fa-shield-halved"></i> Conexão Segura & LGPD
+              </div>
+            </div>
+
+            <!-- TELA 2: PAINEL DO CIDADÃO -->
+            <div class="screen-view" id="screen-2">
+              <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;">👋 Olá, Paciente!</div>
+              <div style="font-size: 0.68rem; color: var(--accent-cyan); margin-bottom: 14px;"><i class="fa-solid fa-location-dot"></i> UBS Centro II</div>
+
+              <div class="mock-card highlight">
+                <div style="font-size: 0.72rem; color: var(--accent-green); font-weight: 700; margin-bottom: 4px;">
+                  <i class="fa-solid fa-circle-check"></i> CONSULTA CONFIRMADA
+                </div>
+                <div style="font-size: 0.75rem; color: white;">Clínico Geral</div>
+                <div style="font-size: 0.68rem; color: var(--text-sub);">Terça-feira • 08:30</div>
+              </div>
+
+              <div class="grid-2">
+                <div class="action-badge">
+                  <i class="fa-solid fa-calendar-plus"></i>
+                  <span>Agendar</span>
+                </div>
+                <div class="action-badge">
+                  <i class="fa-solid fa-clock-rotate-left"></i>
+                  <span>Histórico</span>
+                </div>
+                <div class="action-badge">
+                  <i class="fa-solid fa-pills"></i>
+                  <span>Remédios</span>
+                </div>
+                <div class="action-badge">
+                  <i class="fa-solid fa-users"></i>
+                  <span>Fila Ao Vivo</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- TELA 3: AGENDAMENTO RÁPIDO -->
+            <div class="screen-view" id="screen-3">
+              <div style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: 600; margin-bottom: 12px;">
+                <i class="fa-solid fa-user-doctor"></i> Seleção de Especialidade
+              </div>
+
+              <div class="mock-card" style="border-color: var(--accent-cyan);">
+                <div style="font-size: 0.75rem; font-weight: 600; color: white;">🩺 Clínico Geral</div>
+                <div style="font-size: 0.68rem; color: var(--accent-green);">Vagas disponíveis esta semana</div>
+              </div>
+
+              <div class="mock-card">
+                <div style="font-size: 0.75rem; font-weight: 600; color: white;">🦷 Odontologia</div>
+                <div style="font-size: 0.68rem; color: var(--text-sub);">Atendimento preferencial</div>
+              </div>
+
+              <div class="pulse-btn" style="background: var(--accent-green); border: none; font-size: 0.75rem; margin-top: auto;">
+                Confirmar Horário ➔
+              </div>
+            </div>
+
+            <!-- TELA 4: COMPROVANTE & LEMBRETE -->
+            <div class="screen-view" id="screen-4">
+              <div style="text-align: center; color: var(--accent-green); margin-bottom: 12px;">
+                <i class="fa-solid fa-circle-check" style="font-size: 2rem;"></i>
+                <div style="font-size: 0.85rem; font-weight: 700; margin-top: 4px;">AGENDAMENTO PRONTO!</div>
+              </div>
+
+              <div class="mock-card highlight" style="text-align: center;">
+                <div style="font-size: 0.7rem; color: var(--text-sub);">Comprovante Digital</div>
+                <div style="font-size: 0.8rem; font-weight: 700; color: white; margin: 4px 0;">#SUS-2026-8987</div>
+                <div style="font-size: 0.68rem; color: var(--accent-cyan);">Lembrete via WhatsApp Ativado 📲</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- CARD EXPLICATIVO DO PASSO ATUAL -->
+        <div class="explanation-card" id="explanation-card">
+          <h3 id="step-title"><i class="fa-solid fa-shield-halved"></i> Etapa 1: Login Descomplicado</h3>
+          <p id="step-desc">Acesso instantâneo e seguro sem a necessidade de senhas complexas ou cadastro demorado.</p>
+          
+          <ul class="bullets-list" id="step-bullets">
+            <li><i class="fa-solid fa-circle-check"></i> Autenticação direta via Google, Gov.br ou Cartão SUS.</li>
+            <li><i class="fa-solid fa-circle-check"></i> Identificação e vinculação automática com a UBS do bairro.</li>
+            <li><i class="fa-solid fa-circle-check"></i> Segurança total de dados em conformidade com a LGPD.</li>
+          </ul>
+
+          <!-- DESTAQUE SOBRE O DESENVOLVIMENTO DO APP (EXIBIDO NO FINAL) -->
+          <div class="dev-badge" id="dev-badge" style="display: none;">
+            <i class="fa-solid fa-rocket"></i>
+            <div class="dev-badge-text">
+              <h5>Projeto Concluído & Totalmente Funcional!</h5>
+              <p>Este aplicativo já foi <strong>completamente desenvolvido, testado e integrado ao banco de dados em tempo real</strong> por um membro da nossa equipe, estando 100% pronto para uso operacional.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <div class="nav-bar">
+      <div class="counter">ETAPA <span id="current-step">01</span> / 04</div>
+      <div class="arrows-box">
+        <button class="arrow-btn" id="btn-prev" aria-label="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="arrow-btn" id="btn-next" aria-label="Próximo"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SCRIPT DE NAVEGAÇÃO E ANIMAÇÃO -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let currentStep = 0;
+      
+      const stepsData = [
+        {
+          title: '<i class="fa-solid fa-shield-halved"></i> Etapa 1: Login Descomplicado',
+          desc: 'Acesso instantâneo e seguro para o cidadão sem necessidade de guardar senhas difíceis.',
+          bullets: [
+            'Autenticação em 1 clique via Conta Google, CPF ou número do Cartão SUS.',
+            'Identificação automática da Unidade Básica de Saúde (UBS) de referência.',
+            'Proteção rigorosa de dados pessoais e médicos sob a LGPD.'
+          ],
+          showBadge: false
+        },
+        {
+          title: '<i class="fa-solid fa-house-medical"></i> Etapa 2: Central de Serviços',
+          desc: 'Um painel claro e direto onde o paciente encontra tudo o que precisa na palma da mão.',
+          bullets: [
+            'Visualização clara da próxima consulta confirmada.',
+            'Atalhos diretos para novos agendamentos e histórico médico.',
+            'Monitoramento da fila da UBS e estoque de medicamentos em tempo real.'
+          ],
+          showBadge: false
+        },
+        {
+          title: '<i class="fa-solid fa-user-doctor"></i> Etapa 3: Agendamento em Segundos',
+          desc: 'Escolha de médicos e horários sem filas presenciais ou madrugadas de espera.',
+          bullets: [
+            'Seleção da especialidade (Clínico Geral, Odontologia, Pediatria, etc.).',
+            'Exibição transparente de dias e horários com vagas reais.',
+            'Confirmação direta no sistema e-SUS da prefeitura.'
+          ],
+          showBadge: false
+        },
+        {
+          title: '<i class="fa-solid fa-receipt"></i> Etapa 4: Comprovante & Lembrete Automático',
+          desc: 'Garantia de presença e redução expressiva no absenteísmo da saúde pública.',
+          bullets: [
+            'Geração de comprovante e número de protocolo do atendimento.',
+            'Envio de lembretes automáticos pelo WhatsApp 24 horas antes da consulta.',
+            'Opção de desmarcação rápida com 1 clique para liberar a vaga para outro cidadão.'
+          ],
+          showBadge: true // Exibe o destaque no último slide
+        }
+      ];
+
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const currentStepText = document.getElementById('current-step');
+      
+      const stepTitle = document.getElementById('step-title');
+      const stepDesc = document.getElementById('step-desc');
+      const stepBullets = document.getElementById('step-bullets');
+      const devBadge = document.getElementById('dev-badge');
+
+      function updateUI() {
+        // Atualiza mockup do celular
+        document.querySelectorAll('.screen-view').forEach((view, idx) => {
+          if (idx === currentStep) {
+            view.classList.add('active');
+          } else {
+            view.classList.remove('active');
+          }
+        });
+
+        // Atualiza explicações com efeito de transição
+        const data = stepsData[currentStep];
+        stepTitle.innerHTML = data.title;
+        stepDesc.textContent = data.desc;
+        stepBullets.innerHTML = data.bullets.map(b => `<li><i class="fa-solid fa-circle-check"></i> ${b}</li>`).join('');
+
+        // Exibe o badge de conclusão do app no último slide
+        if (data.showBadge) {
+          devBadge.style.display = 'flex';
+        } else {
+          devBadge.style.display = 'none';
+        }
+
+        // Atualiza controles da barra
+        currentStepText.textContent = String(currentStep + 1).padStart(2, '0');
+        btnPrev.disabled = currentStep === 0;
+        btnNext.disabled = currentStep === stepsData.length - 1;
+      }
+
+      btnNext.addEventListener('click', () => {
+        if (currentStep < stepsData.length - 1) {
+          currentStep++;
+          updateUI();
+        }
+      });
+
+      btnPrev.addEventListener('click', () => {
+        if (currentStep > 0) {
+          currentStep--;
+          updateUI();
+        }
+      });
+
+      // Navegação por teclado
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+          if (currentStep < stepsData.length - 1) {
+            currentStep++;
+            updateUI();
+          }
+        } else if (e.key === 'ArrowLeft') {
+          if (currentStep > 0) {
+            currentStep--;
+            updateUI();
+          }
+        }
+      });
+
+      updateUI();
+    });
+  </script>
+</body>
+</html>
